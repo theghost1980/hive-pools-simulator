@@ -1,0 +1,11 @@
+.pools-table {
+  background: red;
+  .selected {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  .not-selected {
+    font-weight: 200;
+    text-decoration: unset;
+  }
+}
