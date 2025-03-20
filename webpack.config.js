@@ -23,6 +23,16 @@ module.exports = {
     // exclude node_modules
     rules: [
       {
+        test: /\.svg$/i,
+        type: "asset",
+        resourceQuery: /url/, // *.svg?url
+      },
+      {
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
+        use: [{ loader: "@svgr/webpack", options: { icon: true } }],
+      },
+      {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: ["babel-loader"],
