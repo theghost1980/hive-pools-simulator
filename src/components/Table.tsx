@@ -6,9 +6,10 @@ import TableHeaderItem from "./Table-Header-Item";
 
 interface Props {
   tableData: Pool[];
+  clickOnItem?: (_id: number) => void;
 }
 
-const Table = ({ tableData }: Props) => {
+const Table = ({ tableData, clickOnItem }: Props) => {
   const [data, setData] = useState<Pool[]>(tableData);
   const [showingData, setShowingData] = useState<Pool[]>([]);
   const [rowCount, setRowCount] = useState(10);
@@ -80,7 +81,7 @@ const Table = ({ tableData }: Props) => {
         <tbody>
           {showingData.map((p) => {
             return (
-              <tr key={p._id}>
+              <tr key={p._id} onClick={() => clickOnItem(p._id)}>
                 {Object.values(p).map((v, i) => {
                   return <td key={`cell-value-${i}-${v}`}>{v}</td>;
                 })}
