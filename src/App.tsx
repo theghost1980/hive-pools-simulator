@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { BaseApi } from "./api/BaseApi";
-import PoolsTable from "./components/Pools-Table";
+import Table from "./components/Table";
+import { Pool } from "./interfaces/pools.interface";
 import "./styles/app.css";
-import { ENGINEEP } from "./utils/ssc-library-util";
+import { ENGINEEP, SscLibraryUtils } from "./utils/ssc-library-util";
 
 export const App = () => {
   const [lastBlockInfo, setLastBlockInfo] = useState({
@@ -10,6 +11,7 @@ export const App = () => {
     timestamp: "",
     transactions: [],
   });
+  const [tableData, setTableData] = useState<Pool[]>([]);
 
   useEffect(() => {
     init();
@@ -53,6 +55,21 @@ export const App = () => {
     // ssc.find('liquidity', 'pools', { }, 1000, 0, [], (err: any, result: any) => {
     //   console.log({err, result});
     // })
+
+    SscLibraryUtils.ssc.find(
+      "marketpools",
+      "pools",
+      {},
+      1000,
+      0,
+      [],
+      (err: any, result: any) => {
+        console.log("find", { err, result });
+        if (result && result.length) {
+          setTableData(result);
+        }
+      }
+    );
   };
 
   return (
@@ -63,7 +80,7 @@ export const App = () => {
       <p>Timestamp: {lastBlockInfo.timestamp}</p>
       <p>Transactions in Block: {lastBlockInfo.transactions.length}</p>
 
-      <PoolsTable />
+      {tableData && tableData.length && <Table tableData={tableData} />}
     </div>
   );
 };
