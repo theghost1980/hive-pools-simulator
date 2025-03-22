@@ -1,0 +1,54 @@
+.table-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: scroll;
+  border: 1px solid;
+  border-radius: 12px;
+  padding: 8px;
+  .table-title {
+    text-align: center;
+  }
+  table {
+    thead {
+      text-align: center;
+    }
+    thead > tr > th {
+      padding: 8px;
+      .table-head-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        .table-filter-container {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+      .selected {
+        font-weight: bold;
+        text-decoration: underline;
+      }
+    }
+    tbody > tr > td {
+      padding-bottom: 6px;
+    }
+    tbody > tr {
+      cursor: pointer;
+    }
+    tbody > .highligth {
+      background-color: bisque;
+    }
+  }
+  .not-selected {
+    font-weight: 200;
+    text-decoration: unset;
+  }
+  .table-selectors {
+    text-align: center;
+    span {
+      cursor: pointer;
+    }
+  }
+}

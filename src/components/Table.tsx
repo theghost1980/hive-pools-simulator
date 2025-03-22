@@ -1,64 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { Pool } from "../interfaces/pools.interface";
-import "../styles/pools-table.css";
-import { PoolDataFields } from "../types/pool";
-import TableHeaderItem from "./Table-Header-Item";
-
+import React, { useState } from "react";
+import "../styles/table.css";
+import Icon from "./Icon";
 interface Props {
-  tableData: Pool[];
-  clickOnItem?: (_id: number) => void;
+  tableData: any[];
+  showingData: any[];
+  clickOnItem?: (tokenPair: string, account?: string) => void;
+  orderTable: (k: string, asc?: boolean) => void;
+  setPageIndex: (i: number) => void;
+  pageIndex: number;
+  rowCount: number;
+  orderBy: string;
+  pages: number;
+  tableTitle: string;
 }
 
-const Table = ({ tableData, clickOnItem }: Props) => {
-  const [data, setData] = useState<Pool[]>(tableData);
-  const [showingData, setShowingData] = useState<Pool[]>([]);
-  const [rowCount, setRowCount] = useState(10);
-  const [pages, setPages] = useState<number>(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [orderBy, setOrderBy] = useState<PoolDataFields>("_id");
-
-  useEffect(() => {
-    if (tableData && tableData.length) {
-      const tempData = [...tableData];
-      tempData.slice(pageIndex * rowCount, pageIndex * rowCount + rowCount);
-      setShowingData(tempData);
-      setPages(Math.floor(tableData.length / 10));
-    }
-  }, []);
-
-  const orderTable = (orderBy: PoolDataFields, asc?: boolean) => {
-    const tempTableData = [...data];
-    if (asc) {
-      if (orderBy === "tokenPair" || orderBy === "creator") {
-        tempTableData.sort((a, b) =>
-          String(a[orderBy]).localeCompare(String(b[orderBy]))
-        );
-      } else {
-        tempTableData.sort((a, b) => a[orderBy] - b[orderBy]);
-      }
-    } else {
-      if (orderBy === "tokenPair" || orderBy === "creator") {
-        tempTableData.sort((a, b) =>
-          String(b[orderBy]).localeCompare(String(a[orderBy]))
-        );
-      } else {
-        tempTableData.sort((a, b) => b[orderBy] - a[orderBy]);
-      }
-    }
-    setData(tempTableData);
-    setOrderBy(orderBy);
-  };
-
-  useEffect(() => {
-    const tempPoolList = [...data].slice(
-      pageIndex * rowCount,
-      pageIndex * rowCount + rowCount
-    );
-    setShowingData(tempPoolList);
-  }, [data, pageIndex, orderBy]);
+const Table = ({
+  tableData,
+  clickOnItem,
+  orderTable,
+  showingData,
+  orderBy,
+  pageIndex,
+  pages,
+  setPageIndex,
+  tableTitle,
+}: Props) => {
+  const [rowIdMouseEnter, setRowIdMouseEnter] = useState(0);
 
   return (
     <div className="table-container">
+      <h3 className="table-title">{tableTitle}</h3>
       <table>
         <thead>
           <tr>
@@ -66,12 +37,23 @@ const Table = ({ tableData, clickOnItem }: Props) => {
               ? Object.keys(tableData[0]).map((k, i) => {
                   return (
                     <th key={`${k}-table-field-${i}`}>
-                      <TableHeaderItem
-                        key={`table-header-item-${i}-${k}`}
-                        orderBy={k as PoolDataFields}
-                        onClick={(k, asc) => orderTable(k, asc)}
-                        selected={orderBy as PoolDataFields}
-                      />
+                      <div
+                        className={`table-head-container ${
+                          orderBy === k ? "table-ordered-by" : ""
+                        }`}
+                      >
+                        {k}
+                        <div className="table-filter-container">
+                          <Icon
+                            title="Order Asc"
+                            onClick={() => orderTable(k, true)}
+                          />
+                          <Icon
+                            title="Order Des"
+                            onClick={() => orderTable(k)}
+                          />
+                        </div>
+                      </div>
                     </th>
                   );
                 })
@@ -81,9 +63,14 @@ const Table = ({ tableData, clickOnItem }: Props) => {
         <tbody>
           {showingData.map((p) => {
             return (
-              <tr key={p._id} onClick={() => clickOnItem(p._id)}>
+              <tr
+                onMouseEnter={() => setRowIdMouseEnter(p._id)}
+                key={p._id}
+                onClick={() => clickOnItem(p.tokenPair, p.account)}
+                className={`${p._id === rowIdMouseEnter ? "highligth" : null}`}
+              >
                 {Object.values(p).map((v, i) => {
-                  return <td key={`cell-value-${i}-${v}`}>{v}</td>;
+                  return <td key={`cell-value-${i}-${v}`}>{v as any}</td>;
                 })}
               </tr>
             );

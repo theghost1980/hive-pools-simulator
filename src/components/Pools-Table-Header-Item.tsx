@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../styles/table-header-item.css";
+import "../styles/pools-table-header-item.css";
 import { PoolDataFields } from "../types/pool";
 import Icon from "./Icon";
 
@@ -9,7 +9,7 @@ interface Props {
   selected: PoolDataFields;
 }
 
-const TableHeaderItem = ({ onClick, orderBy, selected }: Props) => {
+const PoolsTableHeaderItem = ({ onClick, orderBy, selected }: Props) => {
   const [selectedHeader, setSelectedHeader] = useState("");
 
   const onClickHandler = (asc?: boolean) => {
@@ -36,4 +36,4 @@ const TableHeaderItem = ({ onClick, orderBy, selected }: Props) => {
   );
 };
 
-export default TableHeaderItem;
+export default PoolsTableHeaderItem;
