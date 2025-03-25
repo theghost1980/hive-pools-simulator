@@ -37,10 +37,6 @@ const Pools = () => {
     //    - rewardPools
 
     //using ssc lib
-    SscLibraryUtils.ssc.getContractInfo("lp", (err: any, result: any) => {
-      console.log("getContractInfo lp", { err, result });
-    });
-
     //
     SscLibraryUtils.ssc.find(
       "marketpools",

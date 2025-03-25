@@ -1,6 +1,8 @@
+const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const { buffer } = require("stream/consumers");
 
 module.exports = {
   entry: "./src/index.tsx",
@@ -10,6 +12,12 @@ module.exports = {
     path: path.resolve(__dirname, "build"),
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      Buffer: ["buffer", "Buffer"],
+    }),
+    new webpack.ProvidePlugin({
+      process: "process/browser",
+    }),
     new CopyPlugin({
       patterns: [{ from: "src/assets", to: "assets" }],
     }),
@@ -59,6 +67,21 @@ module.exports = {
   },
   // pass all js files through Babel
   resolve: {
-    extensions: ["*", ".js", ".jsx", ".ts", ".tsx"],
+    extensions: [".*", ".js", ".jsx", ".ts", ".tsx"],
+    fallback: {
+      assert: require.resolve("assert"),
+      crypto: require.resolve("crypto-browserify"),
+      http: require.resolve("stream-http"),
+      https: require.resolve("https-browserify"),
+      stream: require.resolve("stream-browserify"),
+      buffer: require.resolve("buffer"),
+      util: require.resolve("util/"),
+      assert: require.resolve("assert/"),
+      vm: require.resolve("vm-browserify"),
+      buffer: require.resolve("buffer"),
+    },
+    alias: {
+      process: "process/browser",
+    },
   },
 };

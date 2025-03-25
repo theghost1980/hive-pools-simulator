@@ -26,4 +26,19 @@
       column-gap: 12px;
     }
   }
+  .position-details {
+    display: flex;
+    flex-direction: row;
+    column-gap: 12px;
+  }
+  .position-history {
+    ul {
+      list-style: none;
+    }
+    .position-history-item {
+      display: flex;
+      flex-direction: row;
+      column-gap: 12px;
+    }
+  }
 }
