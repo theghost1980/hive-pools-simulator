@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import Layout from "./layouts/Layout";
 import Home from "./pages/home";
 import Pools from "./pages/pools";
+import Positions from "./pages/positions";
 import Simulator from "./pages/simulator";
 import "./styles/app.css";
 
@@ -13,6 +14,7 @@ export const App = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="pools" element={<Pools />} />
+          <Route path="positions" element={<Positions />} />
           <Route path="simulator" element={<Simulator />} />
         </Route>
       </Routes>

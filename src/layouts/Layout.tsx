@@ -18,6 +18,11 @@ const Layout = () => {
             </NavLink>
           </li>
           <li>
+            <NavLink to="/positions" end>
+              Positions
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/simulator" end>
               Simulator
             </NavLink>

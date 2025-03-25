@@ -17,6 +17,12 @@ const Pools = () => {
     init();
   }, []);
 
+  //TODO important:
+  //  possibly the only way to get the current:
+  //  - tokens amount of each, from the tokenPair is to calculate "on the go" using:
+  //    - baseVolumen and other params.
+  //  - fee should be looking into distribution? or mining?
+
   const init = async () => {
     // using getContractInfo works with:
     //  - distribution
@@ -24,22 +30,42 @@ const Pools = () => {
     //  - market
     //  - marketpools
     //  - mining
-    //using ssc lib
-    // ssc.getContractInfo('marketpools', (err: any, result: any) => {
-    //   console.log(err, result);
-    // });
-    // ssc.findOne(
-    //   'distribution',
-    //   'batches',
-    //   {
-    //     tokenPair:  'SWAP.HIVE:PAL'
-    //   }, (err: any, result: any) => {
-    //   console.log('findOne',{err, result});
-    // });
+    //    - pools
+    //    - tokenPools
+    //    - nftTokenPools
+    //  - comment-contract = "comments"
+    //    - rewardPools
 
-    // ssc.find('liquidity', 'pools', { }, 1000, 0, [], (err: any, result: any) => {
-    //   console.log({err, result});
-    // })
+    //using ssc lib
+    SscLibraryUtils.ssc.getContractInfo("lp", (err: any, result: any) => {
+      console.log("getContractInfo lp", { err, result });
+    });
+
+    //
+    SscLibraryUtils.ssc.find(
+      "marketpools",
+      "tokens",
+      {},
+      1000,
+      0,
+      [],
+      (err: any, result: any) => {
+        console.log("find marketpools tokens", { err, result });
+      }
+    );
+    //
+
+    SscLibraryUtils.ssc.find(
+      "distribution",
+      "batches",
+      {},
+      1000,
+      0,
+      [],
+      (err: any, result: any) => {
+        console.log("distribution batches", { err, result });
+      }
+    );
 
     SscLibraryUtils.ssc.find(
       "marketpools",
@@ -75,7 +101,7 @@ const Pools = () => {
       0,
       [],
       (err: any, result: any) => {
-        console.log("find Positions", { err, result });
+        console.log("find liquidity Positions", { err, result });
         if (result && result.length) {
           setLiquidityPositions(result);
         }
@@ -91,31 +117,29 @@ const Pools = () => {
 
     console.log({ account, tokenPair }); //TODO REM
 
-    //testing for mining contracts
-    SscLibraryUtils.ssc.find(
-      "mining",
-      "pools",
-      {},
-      1000,
-      0,
-      [],
-      (err: any, result: any) => {
-        console.log("find Mining", { err, result });
-        //TODO set data
-      }
-    );
-    SscLibraryUtils.ssc.find(
-      "mining",
-      "power",
-      {},
-      1000,
-      0,
-      [],
-      (err: any, result: any) => {
-        console.log("find Mining power", { err, result });
-        //TODO set data
-      }
-    );
+    // SscLibraryUtils.ssc.findOne(
+    //   "tokens",
+    //   "contractsBalances",
+    //   {
+    //     account,
+    //     tokenPair,
+    //   },
+    //   (err: any, result: any) => {
+    //     console.log("findOne pools", { err, result });
+    //     //TODO set data
+    //   }
+    // );
+    // SscLibraryUtils.ssc.find(
+    //   "mining",
+    //   "pools",
+    //   {},
+    //   1000,
+    //   0,
+    //   [],
+    //   (err: any, result: any) => {
+    //     console.log("find mining pools", { err, result });
+    //   }
+    // );
   };
 
   return (
