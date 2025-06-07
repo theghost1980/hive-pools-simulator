@@ -34,6 +34,55 @@ const Position = () => {
   }, []);
 
   const init = async () => {
+    //TODO remove
+    SscLibraryUtils.ssc.getContractInfo("marketpools", (err: any, res: any) => {
+      console.log("marketpools info", { res });
+    });
+
+    // SscLibraryUtils.ssc.find(
+    //   "market",
+    //   "metrics",
+    //   {
+    //     // symbol: { $in: ["PAL", "BEE"] },
+    //     // timestamp: { $gte: oneDayAgo },
+    //     symbol: "PAL",
+    //   },
+    //   1000,
+    //   0,
+    //   [],
+    //   (err: any, result: any) => {
+    //     if (result.length) {
+    //       console.log("market metrics", { result });
+    //     }
+    //   }
+    // );
+    ////
+    const oneDayAgo = Math.floor(Date.now() / 1000) - 7 * 86400;
+    //symbol: "PAL" one only
+    //symbol: { $in: ["PAL", "BEE"] }, two symbol at once
+    SscLibraryUtils.ssc.find(
+      "market",
+      "tradesHistory",
+      {
+        symbol: "PAL",
+        timestamp: { $gte: oneDayAgo },
+      },
+      1000,
+      0,
+      [],
+      (err: any, result: any) => {
+        if (result.length) {
+          const totalUSD = result.reduce(
+            (acc: number, curr: any) =>
+              acc + parseFloat(curr.price) * parseFloat(curr.quantity),
+            0
+          );
+          console.log("market tradesHistory", { result, totalUSD });
+        }
+      }
+    );
+    //TODO rem until here
+
     //in case we may need them //TODO this will go for state app
     const tribaldex_settings = await BaseApi.get(
       "https://api.tribaldex.com/settings"
@@ -159,6 +208,7 @@ const Position = () => {
       "pools",
       { tokenPair: lp.tokenPair },
       (err: any, result: Pool) => {
+        console.log("marketpools pools", { result }); //TODO REM
         const participation = Number(
           (lp.shares * 100) / result.totalShares
         ).toFixed(3);

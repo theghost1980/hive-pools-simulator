@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "../styles/table.css";
+import { formatUtils } from "../utils/format-util";
 import Icon from "./Icon";
+
 interface Props {
   tableData: any[];
   showingData: any[];
@@ -70,7 +72,11 @@ const Table = ({
                 className={`${p._id === rowIdMouseEnter ? "highligth" : null}`}
               >
                 {Object.values(p).map((v, i) => {
-                  return <td key={`cell-value-${i}-${v}`}>{v as any}</td>;
+                  return (
+                    <td key={`cell-value-${i}-${v}`}>
+                      {formatUtils.formatCurrency(v as any)}
+                    </td>
+                  );
                 })}
               </tr>
             );

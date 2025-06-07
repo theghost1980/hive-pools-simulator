@@ -1,4 +1,3 @@
-/**note: Routine taken from Keychain Team as they have Open Source Code */
 const get = async (url: string): Promise<any> => {
   return await new Promise((resolve, reject) => {
     try {
